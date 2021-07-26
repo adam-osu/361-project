@@ -6,12 +6,15 @@ module Mutations
       argument :credentials, Types::AuthProviderCredentialsInput, required: false
     end
 
+    # arguments passed in to mutation
     argument :first_name, String, required: true
     argument :last_name, String, required: true
     argument :auth_provider, AuthProviderSignupData, required: false
 
+    # Return type
     type Types::UserType
 
+    # GraphQL Resolver function that is executed
     def resolve(first_name: nil, last_name: nil, auth_provider: nil)
       User.create!(
         first_name: first_name,
