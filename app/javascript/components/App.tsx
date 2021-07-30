@@ -1,11 +1,11 @@
 import React from "react";
-import { Example } from "./shared/Example";
+import { Router } from "./Router";
+import { Routes } from "./Routes";
 
-const App = () => (
-  <>
-    <h1>Hello World!</h1>
-    <Example />
-  </>
+const App = (props) => (
+  <Router path={props.path}>
+    <Routes />
+  </Router>
 );
 
 export default App;
