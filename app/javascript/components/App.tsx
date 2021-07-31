@@ -4,13 +4,14 @@ import {
   InMemoryCache,
   HttpLink,
   ApolloProvider,
-  useQuery,
-  gql,
 } from "@apollo/client";
 import { Router } from "./Router";
 import { Routes } from "./Routes";
 import { Reset } from "styled-reset";
 
+// Apollo client configuration
+// Get CSRF token from meta tag and send on every request to Rails BE
+// Source: https://egghead.io/blog/rails-graphql-typescript-react-apollo
 const csrfToken = document
   .querySelector("meta[name=csrf-token]")
   .getAttribute("content");
