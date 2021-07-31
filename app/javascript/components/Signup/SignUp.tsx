@@ -1,4 +1,5 @@
 import React from "react";
+import { Redirect } from "react-router-dom";
 import { useMutation, gql } from "@apollo/client";
 
 const signupMutation = gql`
@@ -29,7 +30,9 @@ export const SignUp = () => {
   const emailRef = React.useRef();
   const passwordRef = React.useRef();
 
-  console.log(data);
+  if (data?.createUser) {
+    return <Redirect to="/login" />;
+  }
 
   return (
     <form
