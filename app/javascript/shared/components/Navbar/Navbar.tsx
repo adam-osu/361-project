@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
+import { useAuth } from "../../../components/Auth";
+
 const StyledContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -35,12 +37,24 @@ const StyledLink = styled(Link)`
 `;
 
 export const Navbar = () => {
+  const user = useAuth();
+
   return (
     <StyledContainer>
       <StyledLogoLink to="/">Expense Tracker</StyledLogoLink>
       <StyledMenu>
-        <StyledLink to="/signup">Sign up</StyledLink>
-        <StyledLink to="/login">Login</StyledLink>
+        {user ? (
+          <>
+            <StyledLink to="/expenses">Expenses</StyledLink>
+            <StyledLink to="/categories">Categories</StyledLink>
+            <StyledLink to="/reports">Reports</StyledLink>
+          </>
+        ) : (
+          <>
+            <StyledLink to="/signup">Sign up</StyledLink>
+            <StyledLink to="/login">Login</StyledLink>
+          </>
+        )}
       </StyledMenu>
     </StyledContainer>
   );
