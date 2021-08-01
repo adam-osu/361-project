@@ -3,6 +3,8 @@ class GraphqlController < ApplicationController
   # This allows for outside API access while preventing CSRF attacks,
   # but you'll have to authenticate your user separately
   # protect_from_forgery with: :null_session
+  skip_before_action :verify_authenticity_token
+
 
   def execute
     variables = prepare_variables(params[:variables])
@@ -10,7 +12,7 @@ class GraphqlController < ApplicationController
     operation_name = params[:operationName]
     context = {
       # Query context goes here, for example:
-      # current_user: current_user,
+      current_user: current_user,
     }
     result = ExpenseAppSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
     render json: result
@@ -20,6 +22,24 @@ class GraphqlController < ApplicationController
   end
 
   private
+
+  def current_user
+    return if request.headers['authorization'].blank?
+
+    token = request.headers['authorization'].split(" ")[1]
+    decoded_token = JWT.decode token, hmac_secret, true, { algorithm: 'HS256' }
+    
+    return unless decoded_token
+    
+    user_uuid = decoded_token[0]["user_id"]
+    user = User.find_by(uuid: user_uuid)
+
+    user
+  end
+
+  def hmac_secret
+    Rails.application.credentials.hmac_secret
+  end
 
   # Handle variables in form data, JSON body, or a blank value
   def prepare_variables(variables_param)

@@ -1,5 +1,8 @@
 import React from "react";
 import { useMutation, gql } from "@apollo/client";
+import { Redirect, useHistory } from "react-router-dom";
+
+import { useAuth } from "../Auth";
 
 const signInMutation = gql`
   mutation signinUser($email: String!, $password: String!) {
@@ -17,9 +20,13 @@ export const Login = () => {
     useMutation(signInMutation);
   const emailRef = React.useRef();
   const passwordRef = React.useRef();
+  const history = useHistory();
+  const { fetchUser } = useAuth();
 
   if (data?.signinUser?.token) {
     localStorage.setItem("token", data.signinUser.token);
+    fetchUser();
+    return <Redirect to="/" />;
   }
 
   return (
