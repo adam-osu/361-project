@@ -40,7 +40,7 @@ function useProvideAuth() {
   };
 }
 
-export const authContext = createContext({ currentUser: null });
+export const authContext = createContext({ user: null });
 
 export function ProvideAuth({ children }) {
   const auth = useProvideAuth();

@@ -37,7 +37,7 @@ const StyledLink = styled(Link)`
 `;
 
 export const Navbar = () => {
-  const user = useAuth();
+  const { user } = useAuth();
 
   return (
     <StyledContainer>
