@@ -14,6 +14,10 @@ function useProvideAuth() {
   const fetchUser = async () => {
     const token = localStorage.getItem("token");
 
+    if (!token) {
+      return setUser(null);
+    }
+
     const { data } = await fetch("http://localhost:3000/graphql", {
       headers: {
         authorization: token ? `Bearer ${token}` : "",

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import { useAuth } from "../../../components/Auth";
 
@@ -36,8 +36,20 @@ const StyledLink = styled(Link)`
   }
 `;
 
+const LogoutLink = styled.div`
+  cursor: pointer;
+  padding: 0 1em;
+`;
+
 export const Navbar = () => {
-  const { user } = useAuth();
+  const { user, fetchUser } = useAuth();
+  const history = useHistory();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    fetchUser();
+    return history.push("/login");
+  };
 
   return (
     <StyledContainer>
@@ -48,6 +60,7 @@ export const Navbar = () => {
             <StyledLink to="/expenses">Expenses</StyledLink>
             <StyledLink to="/categories">Categories</StyledLink>
             <StyledLink to="/reports">Reports</StyledLink>
+            <LogoutLink onClick={handleLogout}>Logout</LogoutLink>
           </>
         ) : (
           <>
