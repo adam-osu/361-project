@@ -24,7 +24,7 @@ class GraphqlController < ApplicationController
   private
 
   def current_user
-    return unless request.headers['authorization']
+    return if request.headers['authorization'].blank?
 
     token = request.headers['authorization'].split(" ")[1]
     decoded_token = JWT.decode token, hmac_secret, true, { algorithm: 'HS256' }
