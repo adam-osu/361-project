@@ -7,13 +7,13 @@ import React, { useState, useEffect, useContext, createContext } from "react";
 function useProvideAuth() {
   const [user, setUser] = useState(null);
 
-  const token = localStorage.getItem("token");
-
   const userQuery = {
     query: "query { currentUser {email firstName lastName} }",
   };
 
   const fetchUser = async () => {
+    const token = localStorage.getItem("token");
+
     const { data } = await fetch("http://localhost:3000/graphql", {
       headers: {
         authorization: token ? `Bearer ${token}` : "",
@@ -37,10 +37,11 @@ function useProvideAuth() {
 
   return {
     user,
+    fetchUser,
   };
 }
 
-export const authContext = createContext({ user: null });
+export const authContext = createContext(null);
 
 export function ProvideAuth({ children }) {
   const auth = useProvideAuth();
