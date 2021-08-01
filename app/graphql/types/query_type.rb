@@ -6,5 +6,10 @@ module Types
       context[:current_user]
     end
   
+    field :expenses, [Types::ExpenseType], null: true
+    def expenses
+      return unless context[:current_user]
+      Expense.where(user_id: context[:current_user])
+    end
   end
 end
