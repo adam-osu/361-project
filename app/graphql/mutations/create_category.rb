@@ -2,7 +2,7 @@ module Mutations
   class CreateCategory < BaseMutation
     # arguments passed in to mutation
     argument :name, String, required: true
-    argument :description, String, required: true
+    argument :description, String, required: false
 
     # Return type
     type Types::CategoryType
