@@ -30,7 +30,7 @@ module Types
                 .where("created_at > ?", start_date)
                 .where("created_at < ?", end_date)
                 .sum(:amount)
-        report_data.push({[category.name] => sum})
+        report_data.push([category.name, sum])
       end
 
       report_data
