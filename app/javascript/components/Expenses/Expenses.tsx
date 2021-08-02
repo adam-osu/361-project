@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { gql, useQuery } from "@apollo/client";
 
+import { useAuth } from "../Auth";
 import { LinkButton } from "../../shared/components/LinkButton";
 import { Table, TableHead, TableCell } from "../../shared/components/Table";
 
@@ -18,6 +19,7 @@ const GET_EXPENSES = gql`
 
 export const Expenses = () => {
   const { loading, error, data, refetch } = useQuery(GET_EXPENSES);
+  const { user } = useAuth();
 
   useEffect(() => {
     refetch();
@@ -25,7 +27,11 @@ export const Expenses = () => {
 
   return (
     <>
-      <h1>Expenses</h1>
+      {user ? (
+        <h1>Hello {user.firstName}! Here are your expenses</h1>
+      ) : (
+        <h1>Expenses</h1>
+      )}
       <LinkButton linkTo="/expenses/new" text="Add Expense" />
       {data?.expenses ? (
         <Table>

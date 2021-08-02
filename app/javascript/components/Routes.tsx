@@ -8,6 +8,7 @@ import { AddExpense } from "./AddExpense";
 import { Layout } from "../shared/components/Layout";
 import { Categories } from "./Categories";
 import { AddCategories } from "./AddCategories";
+import { Reports } from "./Reports";
 
 import { useAuth } from "./Auth";
 
@@ -35,12 +36,37 @@ const PrivateRoute = ({ children, ...rest }) => {
   );
 };
 
+const PublicRoute = ({ children, ...rest }) => {
+  const { user } = useAuth();
+  return (
+    <Route
+      {...rest}
+      render={({ location }) =>
+        !user ? (
+          children
+        ) : (
+          <Redirect
+            to={{
+              pathname: "/",
+              state: { from: location },
+            }}
+          />
+        )
+      }
+    />
+  );
+};
+
 export const Routes = () => (
   <Layout>
     <Switch>
       <Route path="/" exact component={Home} />
-      <Route path="/signup" component={SignUp} />
-      <Route path="/login" component={Login} />
+      <PublicRoute path="/signup">
+        <SignUp />
+      </PublicRoute>
+      <PublicRoute path="/login">
+        <Login />
+      </PublicRoute>
       <PrivateRoute exact path="/expenses">
         <Expenses />
       </PrivateRoute>
@@ -52,6 +78,9 @@ export const Routes = () => (
       </PrivateRoute>
       <PrivateRoute path="/categories/new">
         <AddCategories />
+      </PrivateRoute>
+      <PrivateRoute path="/reports">
+        <Reports />
       </PrivateRoute>
     </Switch>
   </Layout>
