@@ -11,5 +11,11 @@ module Types
       return unless context[:current_user]
       Expense.where(user_id: context[:current_user])
     end
+
+    field :categories, [Types::CategoryType], null: true
+    def categories
+      return unless context[:current_user]
+      Category.where(user_id: context[:current_user])
+    end
   end
 end
