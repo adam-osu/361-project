@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Link, useHistory } from "react-router-dom";
 
 import { useAuth } from "../../../components/Auth";
+import { client } from "../../../components/apolloClient";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -46,6 +47,7 @@ export const Navbar = () => {
   const history = useHistory();
 
   const handleLogout = () => {
+    client.cache.reset();
     localStorage.removeItem("token");
     fetchUser();
     return history.push("/login");
