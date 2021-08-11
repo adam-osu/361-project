@@ -26,7 +26,7 @@ export const Login = () => {
   if (data?.signinUser?.token) {
     localStorage.setItem("token", data.signinUser.token);
     fetchUser();
-    return <Redirect to="/" />;
+    return <Redirect to="/expenses" />;
   }
 
   return (
