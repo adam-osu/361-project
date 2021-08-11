@@ -1,5 +1,8 @@
 import React from "react";
 
+import { useAuth } from "../Auth";
+
 export const Home = () => {
-  return <h1>Home</h1>;
+  const { user } = useAuth();
+  return user ? <h1>Welcome {user.firstName}!</h1> : <h1>Home</h1>;
 };
