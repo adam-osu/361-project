@@ -7,5 +7,6 @@ module Types
     field :delete_expense, mutation: Mutations::DeleteExpense
     field :create_category, mutation: Mutations::CreateCategory
     field :update_category, mutation: Mutations::UpdateCategory
+    field :delete_category, mutation: Mutations::DeleteCategory
   end
 end
