@@ -8,9 +8,11 @@ import { Table, TableHead, TableCell } from "../../shared/components/Table";
 const GET_EXPENSES = gql`
   query getExpenses {
     expenses {
+      id
       title
       amount
       category {
+        id
         name
       }
     }
@@ -40,6 +42,7 @@ export const Expenses = () => {
             <th>Amount</th>
             <th>Category</th>
             <th>Date</th>
+            <th>Update</th>
           </TableHead>
           <tbody>
             {data.expenses.map((expense) => (
@@ -52,6 +55,15 @@ export const Expenses = () => {
                   <TableCell>N / A</TableCell>
                 )}
                 <TableCell>TBD</TableCell>
+                <TableCell>
+                  <LinkButton
+                    variant={"secondary"}
+                    size="small"
+                    linkTo="/expenses/edit"
+                    text="Update"
+                    state={expense}
+                  />
+                </TableCell>
               </tr>
             ))}
           </tbody>
