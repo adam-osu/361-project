@@ -9,6 +9,8 @@ export const TableHead = styled.thead`
   text-align: left;
 `;
 
-export const TableCell = styled.th`
+export const TableCell = styled.td`
   text-align: left;
+  padding: 0.2em;
+  border: 1px solid #000;
 `;
