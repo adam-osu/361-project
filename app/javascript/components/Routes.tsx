@@ -5,6 +5,7 @@ import { SignUp } from "./Signup/";
 import { Login } from "./Login";
 import { Expenses } from "./Expenses";
 import { AddExpense } from "./AddExpense";
+import { UpdateExpense } from "./UpdateExpense";
 import { Layout } from "../shared/components/Layout";
 import { Categories } from "./Categories";
 import { AddCategories } from "./AddCategories";
@@ -72,6 +73,9 @@ export const Routes = () => (
       </PrivateRoute>
       <PrivateRoute path="/expenses/new">
         <AddExpense />
+      </PrivateRoute>
+      <PrivateRoute path="/expenses/edit">
+        <UpdateExpense />
       </PrivateRoute>
       <PrivateRoute exact path="/categories">
         <Categories />
