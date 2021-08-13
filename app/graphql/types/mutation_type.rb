@@ -8,5 +8,6 @@ module Types
     field :create_category, mutation: Mutations::CreateCategory
     field :update_category, mutation: Mutations::UpdateCategory
     field :delete_category, mutation: Mutations::DeleteCategory
+    field :send_report_email, mutation: Mutations::SendReportEmail
   end
 end
