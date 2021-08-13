@@ -10,6 +10,7 @@ import { Layout } from "../shared/components/Layout";
 import { Categories } from "./Categories";
 import { AddCategories } from "./AddCategories";
 import { Reports } from "./Reports";
+import { EditCategory } from "./EditCategory";
 
 import { useAuth } from "./Auth";
 
@@ -82,6 +83,9 @@ export const Routes = () => (
       </PrivateRoute>
       <PrivateRoute path="/categories/new">
         <AddCategories />
+      </PrivateRoute>
+      <PrivateRoute path="/categories/edit">
+        <EditCategory />
       </PrivateRoute>
       <PrivateRoute path="/reports">
         <Reports />
