@@ -1,6 +1,8 @@
-import React from "react";
-import { gql, useLazyQuery } from "@apollo/client";
+import React, { useState } from "react";
+import ReactDOMServer from "react-dom/server";
+import { gql, useLazyQuery, useMutation } from "@apollo/client";
 
+import { useAuth } from "../Auth";
 import { Table, TableCell } from "../../shared/components/Table";
 
 const GET_REPORT = gql`
@@ -9,8 +11,19 @@ const GET_REPORT = gql`
   }
 `;
 
+const SEND_REPORT_EMAIL = gql`
+  mutation sendReportEmail(
+    $email: String!
+    $subject: String!
+    $message: String!
+  ) {
+    sendReportEmail(email: $email, subject: $subject, message: $message) {
+      status
+    }
+  }
+`;
+
 const Report = ({ reportData, firstName, lastName, startDate, endDate }) => {
-  console.log(reportData);
   return (
     <div>
       <h2>{firstName + " " + lastName + "'s Report"}</h2>
@@ -42,36 +55,54 @@ const Report = ({ reportData, firstName, lastName, startDate, endDate }) => {
 export const Reports = () => {
   const [getReport, { loading, data }] = useLazyQuery(GET_REPORT);
   const [report, setReport] = React.useState(null);
-
-  const emailRef = React.useRef();
-  const startRef = React.useRef();
-  const endRef = React.useRef();
+  const [sendReportEmail, { data: reportEmailData }] =
+    useMutation(SEND_REPORT_EMAIL);
+  const { user } = useAuth();
+  const [email, setEmail] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   React.useEffect(() => {
     if (data?.report) {
       setReport(data.report);
+
+      if (email) {
+        const reportString = ReactDOMServer.renderToStaticMarkup(
+          <Report
+            firstName={user.firstName}
+            lastName={user.lastName}
+            reportData={data.report}
+            startDate={startDate || ""}
+            endDate={endDate || ""}
+          />
+        );
+
+        sendReportEmail({
+          variables: {
+            email: email,
+            subject: `${user.firstName} ${user.lastName}'s Expense Report - ${startDate} to ${endDate}`,
+            message: reportString,
+          },
+        });
+      }
     }
-  }, [data]);
+  }, [data, email, startDate, endDate]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const email = emailRef?.current?.value ?? "";
-    const start = startRef?.current?.value ?? "";
-    const end = endRef?.current?.value ?? "";
 
-    const startDate = start && new Date(start);
-    const endDateUTC = end && new Date(end).setHours(23, 59, 59, 59);
-    const endDate = endDateUTC && new Date(endDateUTC).toISOString();
-
-    if (!email || !startDate || !endDate) {
+    if (!startDate || !endDate) {
       return;
     }
 
     const results = await getReport({
-      variables: { email, startDate, endDate },
+      variables: {
+        startDate: new Date(startDate),
+        endDate: new Date(
+          new Date(endDate).setHours(23, 59, 59, 59)
+        ).toISOString(),
+      },
     });
-
-    console.log(results);
   };
 
   return (
@@ -80,26 +111,40 @@ export const Reports = () => {
       <form onSubmit={onSubmit}>
         <div>
           <label htmlFor="email">Email</label>
-          <input ref={emailRef} name="email" type="email" />
+          <input
+            onChange={(e) => setEmail(e.target.value)}
+            name="email"
+            type="email"
+          />
         </div>
         <div>
           <label htmlFor="start-date">Start Date</label>
-          <input ref={startRef} name="start-date" type="date" />
+          <input
+            onChange={(e) => setStartDate(e.target.value)}
+            name="start-date"
+            type="date"
+          />
         </div>
         <div>
           <label htmlFor="end-date">End Date</label>
-          <input ref={endRef} name="end-date" type="date" />
+          <input
+            onChange={(e) => setEndDate(e.target.value)}
+            name="end-date"
+            type="date"
+          />
         </div>
-        <button type="submit">Submit</button>
+        <button disabled={!startDate || !endDate} type="submit">
+          Submit
+        </button>
       </form>
       <br />
       {report ? (
         <Report
-          firstName="Adam"
-          lastName="Okasha"
+          firstName={user.firstName}
+          lastName={user.lastName}
           reportData={report}
-          startDate={startRef?.current?.value || ""}
-          endDate={endRef?.current?.value || ""}
+          startDate={startDate || ""}
+          endDate={endDate || ""}
         />
       ) : null}
     </>
