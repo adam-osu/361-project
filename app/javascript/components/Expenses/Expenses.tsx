@@ -5,6 +5,7 @@ import { useAuth } from "../Auth";
 import { LinkButton } from "../../shared/components/LinkButton";
 import { Table, TableHead, TableCell } from "../../shared/components/Table";
 import { Button } from "../../shared/components/Button";
+import { CategoryInfo } from "../../shared/components/CategoryInfo";
 
 const GET_EXPENSES = gql`
   query getExpenses {
@@ -58,7 +59,9 @@ export const Expenses = () => {
           <TableHead>
             <th>Title</th>
             <th>Amount</th>
-            <th>Category</th>
+            <th>
+              Category <CategoryInfo />
+            </th>
             <th>Date</th>
             <th>Update</th>
             <th>Delete</th>
