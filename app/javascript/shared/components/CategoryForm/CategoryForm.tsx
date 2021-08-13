@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 
+import { TextField } from "../TextField";
+
 export const CategoryForm = ({ handleSubmit }) => {
   const location = useLocation();
 
@@ -20,25 +22,18 @@ export const CategoryForm = ({ handleSubmit }) => {
   return (
     <>
       <form onSubmit={onSubmit}>
-        <div>
-          <label htmlFor="name">Name</label>
-          <input
-            value={nameState}
-            onChange={(e) => setName(e.target.value)}
-            name="name"
-            type="text"
-          />
-        </div>
-        <div>
-          <label htmlFor="description">Description</label>
-          <input
-            value={descriptionState}
-            onChange={(e) => setDescription(e.target.value)}
-            name="description"
-            type="text"
-          />
-        </div>
-
+        <TextField
+          label="Name"
+          onChange={(e) => setName(e.target.value)}
+          type="text"
+          value={nameState}
+        />
+        <TextField
+          label="Description"
+          onChange={(e) => setDescription(e.target.value)}
+          type="text"
+          value={descriptionState}
+        />
         <button type="submit">Submit</button>
       </form>
     </>
