@@ -24,7 +24,7 @@ export const Categories = () => {
   return (
     <>
       <h1>Categories</h1>
-      <LinkButton linkTo="/categories/new" text="Add Category" />
+      <LinkButton linkTo="/categories/new">Add Category</LinkButton>
       {data?.categories ? (
         <Table>
           <TableHead>
