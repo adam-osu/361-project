@@ -13,4 +13,11 @@ export const TableCell = styled.td`
   text-align: left;
   padding: 0.2em;
   border: 1px solid #000;
+  ${(props) =>
+    props.contained
+      ? `
+  width: 1%;
+  white-space: nowrap;
+  `
+      : ``}
 `;
