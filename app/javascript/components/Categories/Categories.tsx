@@ -30,12 +30,23 @@ export const Categories = () => {
           <TableHead>
             <th>Name</th>
             <th>Description</th>
+            <th>Update</th>
           </TableHead>
           <tbody>
             {data.categories.map((category) => (
               <tr>
                 <TableCell>{category.name}</TableCell>
                 <TableCell>{category.description}</TableCell>
+                <TableCell contained>
+                  <LinkButton
+                    variant="secondary"
+                    size="small"
+                    linkTo={"/categories/edit"}
+                    state={category}
+                  >
+                    Update
+                  </LinkButton>
+                </TableCell>
               </tr>
             ))}
           </tbody>
