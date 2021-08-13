@@ -5,7 +5,7 @@ import { Link, useHistory } from "react-router-dom";
 import { useAuth } from "../../../components/Auth";
 import { client } from "../../../components/apolloClient";
 
-const StyledContainer = styled.div`
+const StyledContainer = styled.nav`
   display: flex;
   justify-content: space-between;
   padding: 1em;
