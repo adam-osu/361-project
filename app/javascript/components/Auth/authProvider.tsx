@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
 
+import { getCsrfToken } from "../../shared/utilities/getCsrfToken";
+
 // Adapted from https://usehooks.com/useAuth/
 // Creates a provider so we can access auth state
 // in any component
@@ -22,9 +24,7 @@ function useProvideAuth() {
       headers: {
         authorization: token ? `Bearer ${token}` : "",
         "content-type": "application/json",
-        "x-csrf-token": document
-          .querySelector("meta[name=csrf-token]")
-          .getAttribute("content"),
+        "x-csrf-token": getCsrfToken(),
       },
       body: JSON.stringify(userQuery),
       method: "POST",
