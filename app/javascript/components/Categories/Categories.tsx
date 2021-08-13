@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
-import { gql, useQuery } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 
+import { Button } from "../../shared/components/Button";
 import { LinkButton } from "../../shared/components/LinkButton";
 import { Table, TableHead, TableCell } from "../../shared/components/Table";
 
@@ -14,12 +15,28 @@ const GET_CATEGORIES = gql`
   }
 `;
 
+const DELETE_CATEGORY = gql`
+  mutation deleteCategory($id: Int!) {
+    deleteCategory(id: $id) {
+      status
+    }
+  }
+`;
+
 export const Categories = () => {
   const { loading, error, data, refetch } = useQuery(GET_CATEGORIES);
+  const [
+    deleteCategory,
+    { data: deleteData, loading: deleteLoading, error: deleteError },
+  ] = useMutation(DELETE_CATEGORY);
 
   useEffect(() => {
     refetch();
-  }, []);
+  }, [deleteData]);
+
+  const handleDelete = (id) => {
+    return () => deleteCategory({ variables: { id } });
+  };
 
   return (
     <>
@@ -46,6 +63,15 @@ export const Categories = () => {
                   >
                     Update
                   </LinkButton>
+                </TableCell>
+                <TableCell contained>
+                  <Button
+                    variant="danger"
+                    size="small"
+                    onClick={handleDelete(category.id)}
+                  >
+                    Delete
+                  </Button>
                 </TableCell>
               </tr>
             ))}
