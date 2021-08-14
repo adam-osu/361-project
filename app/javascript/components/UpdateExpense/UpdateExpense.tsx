@@ -9,12 +9,14 @@ const UPDATE_EXPENSE = gql`
     $title: String!
     $amount: Float!
     $categoryId: Int
+    $expensedAt: ISO8601DateTime
   ) {
     updateExpense(
       id: $id
       title: $title
       amount: $amount
       categoryId: $categoryId
+      expensedAt: $expensedAt
     ) {
       status
     }
@@ -28,13 +30,20 @@ export const UpdateExpense = () => {
     return <Redirect to="/expenses" />;
   }
 
-  const handleSubmit = async ({ id, title, amount, categoryId }) => {
+  const handleSubmit = async ({
+    id,
+    title,
+    amount,
+    categoryId,
+    expensedAt,
+  }) => {
     await updateExpense({
       variables: {
         id,
         title,
         amount: parseFloat(amount),
         categoryId: parseInt(categoryId),
+        expensedAt,
       },
     });
   };

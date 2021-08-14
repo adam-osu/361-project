@@ -17,6 +17,7 @@ interface ExpenseFormProps {
   amount?: string;
   category?: any;
   location?: any;
+  date?: any;
 }
 
 export const ExpenseForm = ({ handleSubmit }: ExpenseFormProps) => {
@@ -26,10 +27,15 @@ export const ExpenseForm = ({ handleSubmit }: ExpenseFormProps) => {
   const title = location?.state?.title;
   const amount = location?.state?.amount;
   const category = location?.state?.category;
+  const expensedAt = location?.state?.expensedAt;
+
+  // Source: https://stackoverflow.com/questions/14212527/how-to-set-default-value-to-the-inputtype-date
+  const formattedExpensedAt = expensedAt ? expensedAt.substr(0, 10) : "";
 
   const [titleState, setTitle] = useState(title || "");
   const [amountState, setAmount] = useState(amount || "");
   const [categoryState, setCategory] = useState(category?.id || null);
+  const [expensedAtState, setExpensedAt] = useState(formattedExpensedAt);
   const {
     loading: categoryLoading,
     error: categoryError,
@@ -39,7 +45,10 @@ export const ExpenseForm = ({ handleSubmit }: ExpenseFormProps) => {
 
   useEffect(() => {
     categoryRefetch();
-  }, []);
+    if (categoryData && !category) {
+      setCategory(categoryData?.categories[0]?.id || null);
+    }
+  }, [categoryData]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -49,6 +58,7 @@ export const ExpenseForm = ({ handleSubmit }: ExpenseFormProps) => {
       title: titleState,
       amount: amountState,
       categoryId: categoryState,
+      expensedAt: new Date(expensedAtState).toISOString(),
     });
   };
 
@@ -79,23 +89,33 @@ export const ExpenseForm = ({ handleSubmit }: ExpenseFormProps) => {
         <div>
           <label htmlFor="category">Category</label>
           <select
-            value={categoryState}
+            // value={categoryState}
             onChange={(e) => setCategory(e.target.value)}
             name="category"
           >
-            {category ? (
+            {/* {category ? (
               <option value={category.id}>{category.name}</option>
-            ) : null}
+            ) : null} */}
             {categoryData
-              ? categoryData.categories.map((category) => (
-                  <option value={category.id}>{category.name}</option>
+              ? categoryData.categories.map((cat, i) => (
+                  <option
+                    selected={category && category.id == cat.id}
+                    value={cat.id}
+                  >
+                    {cat.name}
+                  </option>
                 ))
               : null}
           </select>
         </div>
         <div>
-          <label htmlFor="date">Date</label>
-          <input disabled name="date" type="date" />
+          <label htmlFor="date">Expense at date</label>
+          <input
+            value={expensedAtState}
+            onChange={(e) => setExpensedAt(e.target.value)}
+            name="date"
+            type="date"
+          />
         </div>
         <button type="submit">Submit</button>
       </form>

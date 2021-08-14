@@ -9,7 +9,7 @@ module Types
     field :expenses, [Types::ExpenseType], null: true
     def expenses
       return unless context[:current_user]
-      Expense.where(user_id: context[:current_user])
+      Expense.where(user_id: context[:current_user]).order(expensed_at: :desc)
     end
 
     field :categories, [Types::CategoryType], null: true

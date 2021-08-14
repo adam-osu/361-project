@@ -18,6 +18,7 @@ const GET_EXPENSES = gql`
         id
         name
       }
+      expensedAt
     }
   }
 `;
@@ -98,7 +99,11 @@ export const Expenses = () => {
                 ) : (
                   <TableCell>N / A</TableCell>
                 )}
-                <TableCell>TBD</TableCell>
+                <TableCell>
+                  {expense.expensedAt
+                    ? expense.expensedAt.substr(0, 10)
+                    : "N / A"}
+                </TableCell>
                 <TableCell contained>
                   <LinkButton
                     variant={"secondary"}
