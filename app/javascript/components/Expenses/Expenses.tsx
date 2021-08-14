@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client";
+import styled from "styled-components";
 
 import { useAuth } from "../Auth";
 import { LinkButton } from "../../shared/components/LinkButton";
@@ -29,12 +30,25 @@ const DELETE_EXPENSE = gql`
   }
 `;
 
+const Notification = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  background: green;
+  border-radius: 5px;
+  width: 15em;
+  padding: 0.5em;
+  font-size: 16px;
+`;
+
 export const Expenses = () => {
   const { loading, error, data, refetch } = useQuery(GET_EXPENSES);
   const [
     deleteExpense,
     { loading: deleteLoading, error: deleteError, data: deleteData },
   ] = useMutation(DELETE_EXPENSE);
+  const [notification, setNotification] = useState(null);
 
   const { user } = useAuth();
 
@@ -43,7 +57,14 @@ export const Expenses = () => {
   }, [deleteData]);
 
   const onDeleteExpense = (id) => {
-    return () => deleteExpense({ variables: { id: id } });
+    return () => {
+      deleteExpense({ variables: { id: id } });
+      setNotification("Expense was deleted successfully");
+
+      setTimeout(() => {
+        setNotification(null);
+      }, 5000);
+    };
   };
 
   return (
@@ -53,6 +74,7 @@ export const Expenses = () => {
       ) : (
         <h1>Expenses</h1>
       )}
+      {notification ? <Notification>{notification}</Notification> : null}
       <LinkButton linkTo="/expenses/new">Add Expense</LinkButton>
       {data?.expenses ? (
         <Table>
