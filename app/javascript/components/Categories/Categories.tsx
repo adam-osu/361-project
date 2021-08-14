@@ -48,6 +48,7 @@ export const Categories = () => {
             <th>Name</th>
             <th>Description</th>
             <th>Update</th>
+            <th>Delete</th>
           </TableHead>
           <tbody>
             {data.categories.map((category) => (
